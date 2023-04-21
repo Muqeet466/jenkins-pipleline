@@ -14,10 +14,7 @@ pipeline {
             }
             post {
                 always {
-                    script {
-                        junit 'target/surefire-reports/**/*.xml'
-                        archiveArtifacts 'target/*.jar'
-                    }
+                    
                 }
                 success {
                     script {
@@ -45,9 +42,7 @@ pipeline {
             }
             post {
                 always {
-                    script {
-                        archiveArtifacts 'target/*.jar'
-                    }
+                    
                 }
                 success {
                     script {
