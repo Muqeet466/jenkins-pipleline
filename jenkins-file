@@ -13,9 +13,7 @@ pipeline {
                 echo 'Running integration tests using Selenium'
             }
             post {
-                always {
-                    
-                }
+           
                 success {
                     script {
                         def emailBody = "The unit and integration tests have passed."
@@ -41,9 +39,7 @@ pipeline {
                 echo 'Running security scan using OWASP ZAP'
             }
             post {
-                always {
-                    
-                }
+                
                 success {
                     script {
                         def emailBody = "The security scan has passed."
