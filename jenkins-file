@@ -1,31 +1,82 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Build"){
-            steps{
-                echo "Building ..."
+    
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building the code using Maven'
             }
-            post{
-                always{
-                    mail to: "mohammedmuqeet046@gmail.com",
-                    subject: "Build Status of the Email",
-                    body: "Build log has been attached!"
+        }
+        stage('Unit and Integration Tests') {
+            steps {
+                echo 'Running unit tests using JUnit'
+                echo 'Running integration tests using Selenium'
+            }
+            post {
+                always {
+                    script {
+                        junit 'target/surefire-reports/**/*.xml'
+                        archiveArtifacts 'target/*.jar'
+                    }
+                }
+                success {
+                    script {
+                        def emailBody = "The unit and integration tests have passed."
+                        emailext body: emailBody, subject: "Tests Passed", to: "mohdmuqeet046@gmail.com"
+                    }
+                }
+                failure {
+                    script {
+                        def emailBody = "The unit and integration tests have failed. Please check the logs for more details."
+                        emailext body: emailBody, subject: "Tests Failed", to: "mohdmuqeet046@gmail.com"
+                        emailext attachLog: true, subject: "Test Failed Log", to: "mohdmuqeet046@gmail.com"
+                    }
                 }
             }
         }
-        stage("Test"){
-            steps{
-                echo "Testing ..."
+        stage('Code Analysis') {
+            steps {
+                echo 'Running code analysis using SonarQube'
             }
         }
-        stage("Deploy"){
-            steps{
-                echo "Deploying ..."
+        stage('Security Scan') {
+            steps {
+                echo 'Running security scan using OWASP ZAP'
+            }
+            post {
+                always {
+                    script {
+                        archiveArtifacts 'target/*.jar'
+                    }
+                }
+                success {
+                    script {
+                        def emailBody = "The security scan has passed."
+                        emailext body: emailBody, subject: "Security Scan Passed", to: "mohdmuqeet046@gmail.com"
+                    }
+                }
+                failure {
+                    script {
+                        def emailBody = "The security scan has failed. Please check the logs for more details."
+                        emailext body: emailBody, subject: "Security Scan Failed", to: "mohdmuqeet046@gmail.com"
+                        emailext attachLog: true, subject: "Security Scan Failed Log", to: "mohdmuqeet046@gmail.com"
+                    }
+                }
             }
         }
-        stage("Complete"){
-            steps{
-                echo "DONE"
+        stage('Deploy to Staging') {
+            steps {
+                echo 'Deploying to staging environment on AWS EC2 instance'
+            }
+        }
+        stage('Integration Tests on Staging') {
+            steps {
+                echo 'Running integration tests on staging environment using Selenium'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo 'Deploying to production environment on AWS EC2 instance'
             }
         }
     }
