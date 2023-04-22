@@ -1,74 +1,77 @@
 pipeline {
     agent any
+    
     stages {
         stage('Build') {
             steps {
-                echo "Building the code"
-                sh 'echo "Build logs" > build.log'
+                echo 'Building the code using Maven'
             }
         }
         stage('Unit and Integration Tests') {
             steps {
-                echo "Running unit tests"
-                sh 'echo "Unit test logs" > unit-test.log'
-                echo "Running integration tests"
-                sh 'echo "Integration test logs" > integration-test.log'
+                echo 'Running unit tests using JUnit'
+                echo 'Running integration tests using Selenium'
+            }
+            post {
+           
+                success {
+                    script {
+                        def emailBody = "The unit and integration tests have passed."
+                        emailext body: emailBody, subject: "Tests Passed", to: "mohdmuqeet046@gmail.com"
+                    }
+                }
+                failure {
+                    script {
+                        def emailBody = "The unit and integration tests have failed. Please check the logs for more details."
+                        emailext body: emailBody, subject: "Tests Failed", to: "mohdmuqeet046@gmail.com"
+                        emailext attachLog: true, subject: "Test Failed Log", to: "mohdmuqeet046@gmail.com"
+                    }
+                }
             }
         }
-        post{
-        success {
-            echo 'The Test stage has completed successfully.'
-            emailtext body: "The Test stage has completed successfully. See attached logs for details.", 
-            subject: "Test stage successful", to: "mohdmuqeet046@gmail.com", attachmentsPattern: 'test/*.log'
-        }
-        failure {
-            echo 'The Test stage has failed.'
-            emailtext body: "The Test stage has failed. See attached logs for details.", 
-            subject: "Test stage failed", to: "youremail@example.com", attachmentsPattern: 'test/*.log'
-        }
-    }
-}
-
         stage('Code Analysis') {
             steps {
-                echo "Running code analysis tool"
-                sh 'echo "Code analysis logs" > code-analysis.log'
+                echo 'Running code analysis using SonarQube'
             }
         }
         stage('Security Scan') {
             steps {
-                echo "Running security scan tool"
-                sh 'echo "Security scan logs" > security-scan.log'
+                echo 'Running security scan using OWASP ZAP'
+            }
+            post {
+                
+                success {
+                    script {
+                        def emailBody = "The security scan has passed."
+                        emailext body: emailBody, subject: "Security Scan Passed", to: "mohdmuqeet046@gmail.com"
+                    }
+                }
+                failure {
+                    script {
+                        def emailBody = "The security scan has failed. Please check the logs for more details."
+                        emailext body: emailBody, subject: "Security Scan Failed", to: "mohdmuqeet046@gmail.com"
+                        emailext attachLog: true, subject: "Security Scan Failed Log", to: "mohdmuqeet046@gmail.com"
+                    }
                 }
             }
-        post {
-        success {
-            echo 'The Security Scan stage has completed successfully.'
-            emailext body: "The Security Scan stage has completed successfully. See attached logs for details.", 
-            subject: "Security Scan stage successful", to: "mohdmuqeet046@gmail.com", attachmentsPattern: 'security/*.log'
         }
-        failure {
-            echo 'The Security Scan stage has failed.'
-            emailext body: "The Security Scan stage has failed. See attached logs for details.", 
-            subject: "Security Scan stage failed", to: "mohdmuqeet046@gmail.com", attachmentsPattern: 'security/*.log'
-        }
-    }
-}
         stage('Deploy to Staging') {
             steps {
-                echo "Deploying to staging server"
-                sh 'echo "Deployment logs" > deploy.log'
+                echo 'Deploying to staging environment on AWS EC2 instance'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                echo "Running integration tests on staging environment"
-                sh 'echo "Staging test logs" > staging-test.log'
+                echo 'Running integration tests on staging environment using Selenium'
             }
         }
         stage('Deploy to Production') {
             steps {
-                echo "Deploying to production server"
-                sh 'echo "Production deployment logs" > production-deploy.log'
+                echo 'Deploying to production environment on AWS EC2 instance'
             }
         }
+    }
+}
+
+
+
