@@ -18,7 +18,7 @@ pipeline {
                     script {
                      def buildStatus = currentBuild.result ?: 'UNKNOWN'
                      subject: "Build ${buildStatus}: Console log"
-                      body: "Build completed successfully",
+                      body: Build completed successfully,
                         def emailBody = "The unit and integration tests have passed."
                         emailext body: emailBody, subject: "Tests Passed", to: "mohdmuqeet046@gmail.com"
                          emailext attachLog: true, subject: "Test passed Log", to: "mohdmuqeet046@gmail.com"
@@ -29,7 +29,7 @@ pipeline {
                     def buildStatus = currentBuild.result ?: 'UNKNOWN'
                         def emailBody = "The unit and integration tests have failed. Please check the logs for more details."
                         subject: "Build ${buildStatus}: Console log"
-                         body: "Build completed successfully"
+                         body: Build completed successfully,
                         emailext body: emailBody, subject: "Tests Failed", to: "mohdmuqeet046@gmail.com"
                         emailext attachLog: true, subject: "Test Failed Log", to: "mohdmuqeet046@gmail.com"
                     }
