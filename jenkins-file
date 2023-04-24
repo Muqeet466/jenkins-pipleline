@@ -16,18 +16,16 @@ pipeline {
            
                 success {
                     script {
-                        def emailBody = "The unit and integration tests have passed."
+                        def emailBody = "The unit and integration tests have passed.Build Status: ${currentBuild.currentResult}"
                         emailext body: emailBody, subject: "Tests Passed", to: "mohdmuqeet046@gmail.com"
                          emailext attachLog: true, subject: "Test passed Log", to: "mohdmuqeet046@gmail.com"
-                           emailext body: "Code status: PASS", subject: "Code Status - PASS", to: "mohdmuqeet046@gmail.com"
                     }
                 }
                 failure {
                     script {
-                        def emailBody = "The unit and integration tests have failed. Please check the logs for more details."
+                        def emailBody = "The unit and integration tests have failed. Please check the logs for more details.Build Status: ${currentBuild.currentResult}"
                         emailext body: emailBody, subject: "Tests Failed", to: "mohdmuqeet046@gmail.com"
                         emailext attachLog: true, subject: "Test Failed Log", to: "mohdmuqeet046@gmail.com"
-                        emailext body: "Code status: FAIL", subject: "Code Status - FAIL", to: "mohdmuqeet046@gmail.com"
                     }
                 }
             }
