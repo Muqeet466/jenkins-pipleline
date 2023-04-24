@@ -18,7 +18,7 @@ pipeline {
                     script {
                         def emailBody = "The unit and integration tests have passed."
                         emailext body: emailBody, subject: "Tests Passed", to: "mohdmuqeet046@gmail.com"
-                         emailext attachLog: true, subject: "Test passed", Log", to: "mohdmuqeet046@gmail.com"
+                         emailext attachLog: true, subject: "Test passed Log", to: "mohdmuqeet046@gmail.com"
                     }
                 }
                 failure {
