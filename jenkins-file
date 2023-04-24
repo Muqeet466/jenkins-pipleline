@@ -43,14 +43,14 @@ pipeline {
                 
                 success {
                     script {
-                        def emailBody = "The security scan has passed."
+                        def emailBody = "The security scan has passed.Build Status: ${currentBuild.currentResult}"
                         emailext body: emailBody, subject: "Security Scan Passed", to: "mohdmuqeet046@gmail.com"
                          emailext attachLog: true, subject: "Security Scan passed Log", to: "mohdmuqeet046@gmail.com"
                     }
                 }
                 failure {
                     script {
-                        def emailBody = "The security scan has failed. Please check the logs for more details."
+                        def emailBody = "The security scan has failed. Please check the logs for more details.Build Status: ${currentBuild.currentResult}"
                         emailext body: emailBody, subject: "Security Scan Failed", to: "mohdmuqeet046@gmail.com"
                         emailext attachLog: true, subject: "Security Scan Failed Log", to: "mohdmuqeet046@gmail.com"
                     }
