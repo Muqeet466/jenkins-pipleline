@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven'
+                echo 'Building code using Maven'
             }
         }
         stage('Unit and Integration Tests') {
@@ -16,7 +16,7 @@ pipeline {
            
                 success {
                     script {
-                        def emailBody = "The unit and integration tests have passed.Build Status: ${currentBuild.currentResult}"
+                        def emailBody = "The unit and integration tests have successfully passed.Build Status: ${currentBuild.currentResult}"
                         emailext body: emailBody, subject: "Tests Passed", to: "mohdmuqeet046@gmail.com"
                          emailext attachLog: true, subject: "Test passed Log", to: "mohdmuqeet046@gmail.com"
                     }
